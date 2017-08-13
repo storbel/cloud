@@ -1,0 +1,30 @@
+
+Vagrant.configure("2") do |config|
+	config.vm.define :packstack do |packstack|
+		  packstack.vm.box = "iamseth/rhel-7.3"
+		  packstack.vm.hostname ="packstack"
+
+		     packstack.vm.network "forwarded_port", guest: 80, host: 1000
+			 packstack.vm.network "private_network", ip: "192.168.35.20"
+			# packstack.vm.network "public_network", type: "dhcp", bridge: "eth0"
+
+		   packstack.vm.provision "shell", inline: <<-SHELL
+			subscription-manager register --username cpsklai@gmail.com --password xaedoo3P --auto-attach
+			subscription-manager repos --enable rhel-7-server-optional-rpms
+			sudo yum install -y https://www.rdoproject.org/repos/rdo-release.rpm
+			sudo yum update -y
+			
+			sudo systemctl disable firewalld
+			sudo systemctl stop firewalld
+			sudo systemctl disable NetworkManager
+			sudo systemctl stop NetworkManager
+			systemctl start network.service
+			systemctl enable network.service
+
+			sudo yum install -y openstack-packstack
+			sudo packstack --allinone	
+
+			sudo /sbin/chkconfig network on
+		   SHELL
+	end
+end

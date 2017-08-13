@@ -1,0 +1,24 @@
+
+Vagrant.configure("2") do |config|
+	config.vm.define :ubuntustack do |ubuntustack|
+		  ubuntustack.vm.box = "ubuntu/trusty64"
+		  ubuntustack.vm.hostname ="ubuntustack"
+
+		     ubuntustack.vm.network "forwarded_port", guest: 80, host: 8080
+			 ubuntustack.vm.network "private_network", ip: "192.168.35.20"
+			# packstack.vm.network "public_network", type: "dhcp", bridge: "eth0"
+
+		   ubuntustack.vm.provision "shell", inline: <<-SHELL
+			sudo apt-get -y install git
+			sudo git clone https://github.com/openstack-dev/devstack.git /opt/devstack/
+			cd /opt/devstack/
+			 sudo tools/create-stack-user.sh
+			sudo chown -R stack:stack /opt/devstack/
+			sudo -i -u stack
+			cd /opt/devstack/
+			cp /vagrant  /opt/devstack/
+			./stack.sh
+
+		   SHELL
+	end
+end

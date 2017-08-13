@@ -1,0 +1,39 @@
+$install_devstack= <<DEVSTACK
+sudo apt-get  update
+sudo apt-get install -y git
+sudo useradd -s /bin/bash -d /opt/stack -m stack
+echo "stack ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack
+sudo su - stack
+git clone https://git.openstack.org/openstack-dev/devstack -b stable/newton
+cd devstack
+echo '
+[[local|localrc]]
+ADMIN_PASSWORD=openstack
+DATABASE_PASSWORD=$ADMIN_PASSWORD
+RABBIT_PASSWORD=$ADMIN_PASSWORD
+SERVICE_PASSWORD=$ADMIN_PASSWORD
+HOST_IP=172.28.128.3
+' >> local.conf
+
+echo "please launch ./stack"
+DEVSTACK
+
+
+Vagrant.configure("2") do |config|
+  #config.vm.box = "ubuntu/ubuntu-16.04"
+  config.vm.box = "stackinabox/openstack"
+  config.vm.hostname = "readystack"
+   #config.vm.network "private_network", type: "dhcp"
+    config.vm.network "private_network", ip: "192.168.27.100"
+  #config.vm.provision :shell, :inline => $install_devstack
+  
+  
+  
+	 config.vm.provider "virtualbox" do |vb|
+	  # Display the VirtualBox GUI when booting the machine
+	  #vb.gui = true
+
+	  # Customize the amount of memory on the VM:
+	  vb.memory = "3072"
+	end
+end

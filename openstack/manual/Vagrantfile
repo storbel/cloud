@@ -1,0 +1,16 @@
+
+Vagrant.configure("2") do |mstack|
+  mstack.vm.box = "ubuntu/precise64"
+  mstack.vm.hostname = "mstack"
+   mstack.vm.network "private_network", type: "dhcp"
+   # mstack.vm.network "private_network", ip: "192.168.122.30"
+  
+  
+	 mstack.vm.provider "virtualbox" do |vb|
+	  # Display the VirtualBox GUI when booting the machine
+	  #vb.gui = true
+
+	  # Customize the amount of memory on the VM:
+	  vb.memory = "3072"
+	end
+end
