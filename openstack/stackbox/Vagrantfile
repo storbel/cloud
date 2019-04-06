@@ -4,7 +4,7 @@ sudo apt-get install -y git
 sudo useradd -s /bin/bash -d /opt/stack -m stack
 echo "stack ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack
 sudo su - stack
-git clone https://git.openstack.org/openstack-dev/devstack -b stable/newton
+git clone https://git.openstack.org/openstack-dev/devstack -b stable/pike
 cd devstack
 echo '
 [[local|localrc]]
