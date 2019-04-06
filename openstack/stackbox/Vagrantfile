@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
   config.vm.hostname = "readystack"
    #config.vm.network "private_network", type: "dhcp"
     config.vm.network "private_network", ip: "192.168.27.100"
-  #config.vm.provision :shell, :inline => $install_devstack
+  config.vm.provision :shell, :inline => $install_devstack
   
   
   
